@@ -26,8 +26,19 @@ jobs:
 
       - name: Install Pandoc
         run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc
+          PANDOC_VERSION="3.1.8"
+          wget https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-1-amd64.deb
+          sudo dpkg -i pandoc-${PANDOC_VERSION}-1-amd64.deb
+          pandoc --version
+
+      - name: Install pandoc-crossref
+        run: |
+          PANDOC_CROSSREF_VERSION="0.3.17.0"
+          wget https://github.com/lierdakil/pandoc-crossref/releases/download/v${PANDOC_CROSSREF_VERSION}/pandoc-crossref-Linux.tar.xz
+          tar -xf pandoc-crossref-Linux.tar.xz
+          sudo mv pandoc-crossref /usr/local/bin/
+          sudo chmod +x /usr/local/bin/pandoc-crossref
+          pandoc-crossref --version
 
       - name: Build main document
         run: make main
