@@ -1,0 +1,26 @@
+# Build outputs
+/build/
+/*.docx
+/*.pdf
+!template.docx
+
+# Python
+*.pyc
+__pycache__/
+*.egg-info/
+
+# R
+*.Rdata
+*.RData
+.Rhistory
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*~
+*.tmp

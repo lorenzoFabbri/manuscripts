@@ -1,0 +1,64 @@
+---
+title: "Your Paper Title: A Comprehensive Analysis"
+short-title: "Short Title for Headers"
+
+# Author and affiliation metadata
+author:
+  - name: Jane Doe
+    affiliations:
+      - ref: cenieh
+      - ref: ucl
+    email: jane.doe@example.com
+    corresponding: true
+    equal-contributor: true
+    orcid: 0000-0001-2345-6789
+
+  - name: John Smith
+    affiliations:
+      - ref: acme
+    equal-contributor: true
+
+affiliations:
+  - id: cenieh
+    name: Centro Nacional de Investigación sobre la Evolución Humana
+    address: Paseo Sierra de Atapuerca 3, 09002, Burgos, Spain
+
+  - id: ucl
+    name: University College London
+    department: Department of Anthropology
+    address: London, WC1H 0BW, UK
+
+  - id: acme
+    name: Acme Corporation
+    department: Research & Development
+    address: 123 Innovation Drive, San Francisco, CA 94105, USA
+
+date: "December 28, 2025"
+
+# Pandoc-crossref configuration
+figPrefix: "Figure"
+eqnPrefix: "Equation"
+tblPrefix: "Table"
+lstPrefix: "Listing"
+secPrefix: "Section"
+
+# Templates for how references appear
+figPrefixTemplate: "$$p$$ $$i$$"
+eqnPrefixTemplate: "$$p$$ $$i$$"
+tblPrefixTemplate: "$$p$$ $$i$$"
+secPrefixTemplate: "$$p$$ $$i$$"
+
+# Titles for list of figures/tables
+figureTitle: "Figure"
+tableTitle: "Table"
+listingTitle: "Listing"
+
+# Enable automatic numbering
+linkReferences: true
+nameInLink: true
+
+bibliography: references.bib
+csl: styles/nature.csl
+link-citations: true
+---
+

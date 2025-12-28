@@ -1,0 +1,57 @@
+name: Build DOCX
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-docx:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+          cache: "pip"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Install Pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+
+      - name: Build main document
+        run: make main
+
+      - name: Build supplement
+        run: make supplement
+
+      - name: Build submission files
+        run: make submission
+
+      - name: Upload main document
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-document
+          path: build/main.docx
+
+      - name: Upload supplement
+        uses: actions/upload-artifact@v4
+        with:
+          name: supplement
+          path: build/supplement.docx
+
+      - name: Upload submission files
+        uses: actions/upload-artifact@v4
+        with:
+          name: submission-files
+          path: build/submission/
