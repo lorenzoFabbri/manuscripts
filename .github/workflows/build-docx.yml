@@ -26,6 +26,7 @@ jobs:
 
       - name: Install Pandoc
         run: |
+          set -e
           PANDOC_VERSION="3.1.8"
           wget https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-1-amd64.deb
           sudo dpkg -i pandoc-${PANDOC_VERSION}-1-amd64.deb
@@ -33,6 +34,7 @@ jobs:
 
       - name: Install pandoc-crossref
         run: |
+          set -e
           PANDOC_CROSSREF_VERSION="0.3.17.0"
           wget https://github.com/lierdakil/pandoc-crossref/releases/download/v${PANDOC_CROSSREF_VERSION}/pandoc-crossref-Linux.tar.xz
           tar -xf pandoc-crossref-Linux.tar.xz
