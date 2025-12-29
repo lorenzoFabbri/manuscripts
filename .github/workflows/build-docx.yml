@@ -17,14 +17,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-          cache: "pip"
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pyyaml
 
-      - name: Install Pandoc
+      - name: Install Pandoc and pandoc-crossref
         run: |
           set -e
           PANDOC_VERSION="3.1.8"
