@@ -12,6 +12,7 @@ This directory contains Lua filters that process the manuscript during Pandoc co
 | `resolve-supp-refs.lua`  | Converts supp fig/table refs to "Figure SX" format | Main & Supplement |
 | `split-main-supp.lua`    | Splits document at `#sec:supp` header              | Main & Supplement |
 | `supp-numbering.lua`     | Adds "Figure SX" prefixes to captions              | Supplement only   |
+| `zotero.lua`             | Creates live Zotero citations in output            | Main & Supplement |
 
 ## Processing Pipeline
 
@@ -25,7 +26,7 @@ pandoc manuscript.md \
   --lua-filter=filters/table-docx-refs.lua \         # 3. Number tables, handle refs
   --filter pandoc-crossref \                         # 4. Process fig/eq cross-refs
   --lua-filter=filters/resolve-supp-refs.lua \       # 5. Convert supp refs to "S" format
-  --citeproc \                                       # 6. Process citations
+  --lua-filter=filters/zotero.lua \                  # 6. Create live Zotero citations
   --lua-filter=filters/split-main-supp.lua \         # 7. Remove supplement section
   -o build/main.docx
 ```
@@ -35,13 +36,13 @@ pandoc manuscript.md \
 ```
 pandoc manuscript.md \
   --metadata=include-main:false \
-  --lua-filter=filters/supp-numbering.lua \          # 1. Add "Figure SX" caption prefixes
-  --lua-filter=filters/scholarly-metadata.lua \      # 2. Normalize metadata
-  --lua-filter=filters/author-info-blocks.lua \      # 3. Format authors
-  --lua-filter=filters/table-docx-refs.lua \         # 4. Number tables, handle refs
-  --filter pandoc-crossref \                         # 5. Process fig/eq cross-refs
+  --lua-filter=filters/scholarly-metadata.lua \      # 1. Normalize metadata
+  --lua-filter=filters/author-info-blocks.lua \      # 2. Format authors
+  --lua-filter=filters/table-docx-refs.lua \         # 3. Number tables, handle refs
+  --filter pandoc-crossref \                         # 4. Process fig/eq cross-refs
+  --lua-filter=filters/supp-numbering.lua \          # 5. Add "Figure SX" caption prefixes
   --lua-filter=filters/resolve-supp-refs.lua \       # 6. Convert supp refs to "S" format
-  --citeproc \                                       # 7. Process citations
+  --lua-filter=filters/zotero.lua \                  # 7. Create live Zotero citations
   --lua-filter=filters/split-main-supp.lua \         # 8. Remove main section
   -o build/supplement.docx
 ```

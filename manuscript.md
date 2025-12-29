@@ -13,7 +13,7 @@ Baseline characteristics
 
 # Results {#sec:results}
 
-Present your results with inline citations [@Smith2024; @Jones2023].
+Present your results with inline citations [@conroyLetQuestionDetermine2020].
 
 As shown in @fig:main1, @fig:main2, and @tbl:regression, we observed...
 
@@ -40,7 +40,7 @@ Everything below this header will be extracted to supplement.docx
 
 ## Supplementary Methods
 
-Additional methodological details.
+Additional methodological details [@savitzHillsConsiderationsAre2025].
 
 ![Supplementary figure caption.](figures/figureS1.png){#fig:supp1}
 

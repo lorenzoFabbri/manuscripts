@@ -17,7 +17,7 @@ This guide provides detailed instructions for using the manuscript template.
 
 ### Prerequisites
 
-1. **Pandoc** (≥ 2.19):
+1. **Pandoc** (≥ 2.16.2):
 
    ```bash
    # macOS
@@ -30,19 +30,26 @@ This guide provides detailed instructions for using the manuscript template.
    # Download from https://pandoc.org/installing.html
    ```
 
-2. **Python** (≥ 3.7):
+2. **Zotero** with **Better BibTeX** extension:
+
+   - Install [Zotero](https://www.zotero.org/download/)
+   - Install [Better BibTeX](https://retorque.re/zotero-better-bibtex/installation/) extension
+   - **Zotero must be running** when you build documents with `make all`
+   - All references cited in your manuscript must be in your Zotero library
+
+3. **Python** (≥ 3.7):
 
    ```bash
    python3 --version  # Check if installed
    ```
 
-3. **PyYAML**:
+4. **PyYAML**:
 
    ```bash
    pip install pyyaml
    ```
 
-4. **pandoc-crossref** (for cross-references):
+5. **pandoc-crossref** (for cross-references):
 
    ```bash
    # macOS
@@ -50,14 +57,6 @@ This guide provides detailed instructions for using the manuscript template.
 
    # Others: download from https://github.com/lierdakil/pandoc-crossref/releases
    ```
-
-### Optional: GitHub Actions
-
-The template includes a `.github/workflows` configuration for automatic builds on push. To use:
-
-1. Push to GitHub
-2. GitHub Actions will automatically build PDFs/DOCX on each commit
-3. Download artifacts from the Actions tab
 
 ## Quick Start
 
@@ -179,16 +178,25 @@ Use `@citationkey` for citations:
 Previous work [@Smith2024; @Jones2023] has shown...
 ```
 
-Add references to `references.bib`:
+**Citation workflow:**
 
-```bibtex
-@article{Smith2024,
-  author = {Smith, John},
-  title = {Example Article},
-  journal = {Nature},
-  year = {2024}
-}
-```
+1. **Add references to your Zotero library** - This is your primary reference manager
+2. **Ensure Zotero is running** when building documents
+3. **Citation keys** are automatically managed by Better BibTeX
+
+**Example:** If you cite `@Smith2024` in your manuscript:
+
+- In Zotero: Set the citation key to `Smith2024` (Better BibTeX will do this automatically)
+- In `references.bib`: The entry must be `@article{Smith2024,...}`
+
+To export from Zotero:
+
+1. Select your collection/library
+2. File → Export Library
+3. Format: Better BibTeX
+4. Save as `references.bib` (overwrite existing)
+
+**Troubleshooting:** If you see "@Smith2024: not found" warnings but your build succeeds, it means the reference is in `references.bib` but not in your Zotero library. Add it to Zotero to get live citations in Word.
 
 ## Managing Figures and Tables
 
@@ -246,11 +254,31 @@ For simple tables or draft versions, you can include Markdown tables:
 ### Basic Commands
 
 ```bash
-make main        # Build main.docx
-make supplement  # Build supplement.docx
+make main        # Build main.docx with live Zotero citations
+make supplement  # Build supplement.docx with live Zotero citations
 make all         # Build both
+make ci          # Build without Zotero (pre-formatted citations)
 make clean       # Remove all build files
 ```
+
+**Important:** The documents are built with **live Zotero citations** that you can edit in Word using the Zotero plugin. Zotero must be running with Better BibTeX installed when you build the documents.
+
+**Citation Workflow Summary:**
+
+- **Local builds (`make all`)**: Uses Zotero filter → creates live citations in Word that can be edited with Zotero plugin
+- **CI builds (`make ci`)**: Uses `references.bib` with citeproc → creates static citations
+- **Requirement**: Keep both Zotero library and `references.bib` in sync by regularly exporting from Zotero
+
+**CI/GitHub Actions:** If you need to build without Zotero (e.g., on a server or in CI), use `make ci` or set `CI=true` environment variable. This will use `references.bib` with pre-formatted citations instead of live Zotero fields.
+
+### Working with Citations in Word
+
+When you open the generated `.docx` files in Word:
+
+1. **First time opening:** Open the Zotero document preferences and click OK before refreshing (this avoids confirmation popups for each citation)
+2. **If Word says file is corrupt:** Just run `make` again without changes - this is a known quirk that fixes itself
+3. **Editing citations:** Use the Zotero plugin in Word as normal to add, remove, or modify citations
+4. **Changing citation style:** Use Zotero's Document Preferences in Word to change the citation style
 
 ### Watch Mode
 
@@ -366,10 +394,12 @@ make submission
 
 This creates `build/submission/` with files renamed according to journal standards:
 
-- `Fig1.png`, `Fig2.pdf`, ...
-- `FigS1.png`, `FigS2.pdf`, ...
-- `Table1.docx`, `Table2.docx`, ...
-- `TableS1.docx`, `TableS2.docx`, ...
+- `Fig1.png`, `Fig2.pdf`, ... (main figures)
+- `FigS1.png`, `FigS2.pdf`, ... (supplementary figures)
+- `Table1.docx`, `Table2.docx`, ... (main tables)
+- `TableS1.docx`, `TableS2.docx`, ... (supplementary tables)
+
+**Note:** The script detects main vs. supplementary items based on their position in `manuscript.md`. Items appearing before the `# Supplementary Material` header are treated as main items; items after it are treated as supplementary.
 
 ### Step 3: Submit
 

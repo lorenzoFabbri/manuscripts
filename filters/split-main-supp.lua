@@ -28,53 +28,36 @@ Markdown structure:
 
 Note: This filter must run after metadata processing filters to ensure
 the metadata flags are properly set.
---]]
-
-local in_supp = false
+--]] local in_supp = false
 local include_supplement = true
 local include_main = true
 
 -- Extract metadata flags once at the beginning
 function Meta(meta)
-  if meta["include-supplement"] ~= nil then
-    include_supplement = meta["include-supplement"]
-  end
-  if meta["include-main"] ~= nil then
-    include_main = meta["include-main"]
-  end
-  return meta
+    if meta["include-supplement"] ~= nil then
+        include_supplement = meta["include-supplement"]
+    end
+    if meta["include-main"] ~= nil then include_main = meta["include-main"] end
+    return meta
 end
 
 function Header(el)
-  if el.identifier == "sec:supp" then 
-    in_supp = true 
-  end
-  
-  if in_supp and not include_supplement then 
-    return {} 
-  end
-  
-  if (not in_supp) and not include_main then 
-    return {} 
-  end
-  
-  return el
+    if el.identifier == "sec:supp" then in_supp = true end
+
+    if in_supp and not include_supplement then return {} end
+
+    if (not in_supp) and not include_main then return {} end
+
+    return el
 end
 
 function Block(el)
-  if in_supp and not include_supplement then 
-    return {} 
-  end
-  
-  if (not in_supp) and not include_main then 
-    return {} 
-  end
-  
-  return el
+    if in_supp and not include_supplement then return {} end
+
+    if (not in_supp) and not include_main then return {} end
+
+    return el
 end
 
 -- Return filters in correct order: Meta must run first
-return {
-  { Meta = Meta },
-  { Header = Header, Block = Block }
-}
+return {{Meta = Meta}, {Header = Header, Block = Block}}

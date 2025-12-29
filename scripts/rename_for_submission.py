@@ -10,9 +10,10 @@ This script processes the manuscript.md file and:
    - Main tables: Table1.docx, Table2.docx, ...
    - Supplementary tables: TableS1.docx, TableS2.docx, ...
 
-The script determines main vs. supplementary based on label prefixes:
-- 'fig:' and 'tbl:' are main manuscript items
-- 'figs:' and 'tbls:' are supplementary items
+The script determines main vs. supplementary based on:
+- Position in document (before or after '# Supplementary Material' header)
+- Main items appear before the supplementary section
+- Supplementary items appear after the supplementary section
 
 Usage:
     python3 scripts/rename_for_submission.py
@@ -37,15 +38,20 @@ with open(TABLE_MAP) as f:
     table_map = yaml.safe_load(f)
 
 fig = figS = tbl = tblS = 0
+in_supplement = False
 
 with MANUSCRIPT.open() as f:
     for line in f:
+        # Check if we've entered the supplementary section
+        if re.match(r'^#\s+Supplementary Material', line, re.IGNORECASE):
+            in_supplement = True
+
         # Match figures
-        m = re.search(r'!\[.*?\]\((.*?)\)\{#(figs?:[^}]+)\}', line)
+        m = re.search(r'!\[.*?\]\((.*?)\)\{#(fig[^}]+)\}', line)
         if m:
             path, label = m.groups()
             src = Path(path)
-            if label.startswith("figs:"):
+            if in_supplement:
                 figS += 1
                 dst = FIG_OUT / f"FigS{figS}{src.suffix}"
             else:
@@ -54,14 +60,14 @@ with MANUSCRIPT.open() as f:
             if src.exists():
                 shutil.copy(src, dst)
                 print(f"Copied: {src} -> {dst}")
-        
+
         # Match tables
-        m = re.search(r'\{#(tbls?:[^}]+)\}', line)
+        m = re.search(r'\{#(tbl[^}]+)\}', line)
         if m:
             label = m.group(1)
             if label in table_map:
                 src = Path(table_map[label])
-                if label.startswith("tbls:"):
+                if in_supplement:
                     tblS += 1
                     dst = FIG_OUT / f"TableS{tblS}.docx"
                 else:

@@ -5,7 +5,7 @@ Reproducible workflow for scientific writing using:
 - **Markdown** for manuscript authoring
 - **Pandoc** for format conversion
 - **Word DOCX** templates for journal submission
-- **Zotero/BibTeX** for references
+- **Zotero** for live citations
 - **Lua filters** for advanced processing (author affiliations, main/supplement splitting)
 
 ## Features
@@ -16,7 +16,6 @@ Reproducible workflow for scientific writing using:
 - ✅ Flexible figure/table placement (near reference, end of section, or grouped)
 - ✅ Table placeholder system for clean manuscripts
 - ✅ Automatic figure and table renaming for submission
-- ✅ GitHub Actions CI/CD pipeline
 - ✅ Custom Word template support
 
 ## Quick Start

@@ -7,14 +7,15 @@ SRC = manuscript.md
 METADATA = metadata.yml
 BUILD = build
 REFDOC = --reference-doc=template.docx
-CITEPROC = --citeproc
 CROSSREF = --filter pandoc-crossref
+ZOTERO = --lua-filter=filters/zotero.lua
+CITEPROC = --bibliography=references.bib --citeproc
 MAIN = $(BUILD)/main.docx
 SUPP = $(BUILD)/supplement.docx
 
 .PHONY: all main supplement submission clean watch
 
-# Default target: build both documents
+# Default target: build both documents with live Zotero citations
 all: main supplement
 
 # Build main manuscript only
@@ -49,7 +50,7 @@ $(MAIN): $(SRC) $(METADATA)
 		--lua-filter=filters/table-docx-refs.lua \
 		$(CROSSREF) \
 		--lua-filter=filters/resolve-supp-refs.lua \
-		$(CITEPROC) \
+		$(ZOTERO) \
 		--lua-filter=filters/split-main-supp.lua \
 		$(REFDOC) -o $(MAIN)
 	@echo "Main document built: $(MAIN)"
@@ -65,7 +66,7 @@ $(SUPP): $(SRC) $(METADATA)
 		$(CROSSREF) \
 		--lua-filter=filters/supp-numbering.lua \
 		--lua-filter=filters/resolve-supp-refs.lua \
-		$(CITEPROC) \
+		$(ZOTERO) \
 		--lua-filter=filters/split-main-supp.lua \
 		$(REFDOC) -o $(SUPP)
 	@echo "Supplement built: $(SUPP)"
